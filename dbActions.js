@@ -8,6 +8,8 @@ const {
   addDepartmentSQL,
   addRoleSQL,
   addEmployeesSql,
+  simpleViewRoleSql,
+  simpleViewEmloyeeSql,
 } = require("./queries");
 
 let db;
@@ -52,27 +54,22 @@ function addRole(title, salary, departmentId) {
   return db.promise().query(addRoleSQL, [title, salary, departmentId]);
 }
 
-function addEmployee(first_name, last_name, role, manager) {
-  db.query(
-    "SELECT role.id from role WHERE role.title = ?",
-    [role],
-    (err, res) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log(res);
-      // const roleid = res[0].id;
-      // db.query(addEmployeesSql, [first_name, last_name, roleid], (err, res) => {
-      //   if (err) {
-      //     console.error(err);
-      //     return;
-      //   }
-      //   console.log("added employee");
-      //   viewEmployees();
-      // });
-    }
-  );
+function addEmployee(firstName, lastName, roleId, managerId) {
+  if (managerId == "") {
+    managerId = null;
+  }
+
+  return db
+    .promise()
+    .query(addEmployeesSql, [firstName, lastName, roleId, managerId]);
+}
+
+function viewSimpleRoles() {
+  return db.promise().query(simpleViewRoleSql);
+}
+
+function viewSimpleEmployees() {
+  return db.promise().query(simpleViewEmloyeeSql);
 }
 
 function closeDbConnection() {
@@ -89,4 +86,6 @@ module.exports = {
   addRole,
   addEmployee,
   closeDbConnection,
+  viewSimpleRoles,
+  viewSimpleEmployees,
 };

@@ -6,6 +6,9 @@ const {
   viewEmployees,
   addDepartment,
   addRole,
+  viewSimpleRoles,
+  viewSimpleEmployees,
+  addEmployee,
 } = require("./dbActions");
 
 const menuQuestion = {
@@ -40,6 +43,19 @@ const roleQuestions = [
     type: "input",
     name: "salary",
     message: "What is the salary of the role?",
+  },
+];
+
+const employeeQuestions = [
+  {
+    type: "input",
+    name: "firstName",
+    message: "What is the first name of the employee?",
+  },
+  {
+    type: "input",
+    name: "lastName",
+    message: "What is the last name of the employee?",
   },
 ];
 
@@ -92,35 +108,81 @@ function displayMenu() {
       case "Add a role":
         viewDepartments() // will return a promise that will return the result of query in db
           .then(([departments]) => {
+            // creating choices for department name question, object with name and value where name will be displayer and value will be the id of department
+            const departmentChoices = departments.map((dep) => {
+              return {
+                name: dep.name,
+                value: dep.id,
+              };
+            });
             const q = {
               type: "list",
-              name: "department",
+              name: "departmentId",
               message: "Which department does the role belong to?",
-              choices: departments,
+              choices: departmentChoices,
             };
             roleQuestions.push(q);
             inquirer
               .prompt(roleQuestions)
-              .then(({ roleName, salary, department }) => {
-                const departmentId = departments.filter(
-                  (dep) => dep.name === department
-                )[0].id;
-                addRole(roleName, salary, departmentId)
-                  .then(() => {
-                    displayMenu();
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                  });
+              .then(({ roleName, salary, departmentId }) => {
+                addRole(roleName, salary, departmentId).then(() => {
+                  displayMenu();
+                });
               });
           })
           .catch((e) => {
             console.error(e);
           });
         break;
-      case "Add an employee ":
-        console.log("Add an employee");
-        displayMenu();
+      case "Add an employee":
+        let roles;
+        let employees;
+        viewSimpleRoles()
+          .then(([ans]) => {
+            roles = ans.map((role) => {
+              return {
+                name: role.title,
+                value: role.id,
+              };
+            });
+            viewSimpleEmployees().then(([ans]) => {
+              employees = ans.map((emp) => {
+                return {
+                  name: emp.full_name,
+                  value: emp.id,
+                };
+              });
+              const noneOption = {
+                name: "None",
+                value: "",
+              };
+              const roleQ = {
+                type: "list",
+                name: "roleId",
+                message: "What is the employee's role?",
+                choices: roles,
+              };
+              const managerQ = {
+                type: "list",
+                name: "managerId",
+                message: "Who is the empoloyee's manager?",
+                choices: [noneOption, ...employees],
+              };
+              employeeQuestions.push(roleQ, managerQ);
+              inquirer
+                .prompt(employeeQuestions)
+                .then(({ firstName, lastName, roleId, managerId }) => {
+                  addEmployee(firstName, lastName, roleId, managerId).then(
+                    () => {
+                      displayMenu();
+                    }
+                  );
+                });
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+          });
         break;
       case "Quit":
         closeDbConnection();

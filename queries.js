@@ -21,8 +21,13 @@ const viewEmployeesSql = `SELECT e.id, e.first_name, e.last_name,
                         JOIN department
                         ON department.id = role.department_id
                       `;
-const addEmployeesSql = `INSERT INTO employee (first_name,last_name,manager_id)
-                          VALUES(?,?,?,)`;
+
+const simpleViewRoleSql = `SELECT role.id, role.title FROM role`;
+
+const simpleViewEmloyeeSql = `SELECT employee.id, concat(employee.first_name, " ", employee.last_name) full_name FROM employee`;
+
+const addEmployeesSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+                          VALUES(?,?,?,?)`;
 
 module.exports = {
   viewDepartmentsSQL,
@@ -31,4 +36,6 @@ module.exports = {
   addDepartmentSQL,
   addRoleSQL,
   addEmployeesSql,
+  simpleViewRoleSql,
+  simpleViewEmloyeeSql,
 };
