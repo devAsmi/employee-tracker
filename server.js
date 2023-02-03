@@ -1,48 +1,8 @@
-const mysql = require("mysql2");
-const cTable = require("console.table");
-const {
-  viewDepartmentsSQL,
-  viewRolesSQL,
-  viewEmployeesSql,
-} = require("./queries");
+const { createDbConnection } = require("./dbActions");
+const { displayMenu } = require("./prompt");
 
-const db = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "language",
-  database: "tracker_db",
-});
+// initialize db connection
+createDbConnection();
 
-function viewDepartments() {
-  db.query(viewDepartmentsSQL, (err, res) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.table(res);
-  });
-}
-
-function viewRoles() {
-  db.query(viewRolesSQL, (err, res) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.table(res);
-  });
-}
-
-function viewEmployees() {
-  db.query(viewEmployeesSql, (err, res) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.table(res);
-  });
-}
-// viewEmployees();
-// viewRoles();
-// viewDepartments();
-db.end();
+// display the application menu
+displayMenu();
