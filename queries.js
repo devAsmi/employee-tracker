@@ -26,6 +26,8 @@ const simpleViewRoleSql = `SELECT role.id, role.title FROM role`;
 
 const simpleViewEmloyeeSql = `SELECT employee.id, concat(employee.first_name, " ", employee.last_name) full_name FROM employee`;
 
+const updateEmployeeRoleSql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+
 const addEmployeesSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
                           VALUES(?,?,?,?)`;
 
@@ -38,4 +40,5 @@ module.exports = {
   addEmployeesSql,
   simpleViewRoleSql,
   simpleViewEmloyeeSql,
+  updateEmployeeRoleSql,
 };

@@ -9,6 +9,7 @@ const {
   viewSimpleRoles,
   viewSimpleEmployees,
   addEmployee,
+  updateEmployeeRole,
 } = require("./dbActions");
 
 const menuQuestion = {
@@ -135,18 +136,16 @@ function displayMenu() {
           });
         break;
       case "Add an employee":
-        let roles;
-        let employees;
         viewSimpleRoles()
           .then(([ans]) => {
-            roles = ans.map((role) => {
+            const roles = ans.map((role) => {
               return {
                 name: role.title,
                 value: role.id,
               };
             });
             viewSimpleEmployees().then(([ans]) => {
-              employees = ans.map((emp) => {
+              const employees = ans.map((emp) => {
                 return {
                   name: emp.full_name,
                   value: emp.id,
@@ -183,6 +182,43 @@ function displayMenu() {
           .catch((e) => {
             console.error(e);
           });
+        break;
+      case "Update an employee role":
+        viewSimpleRoles().then(([ans]) => {
+          const roles = ans.map((role) => {
+            return {
+              name: role.title,
+              value: role.id,
+            };
+          });
+          viewSimpleEmployees().then(([ans]) => {
+            const employees = ans.map((emp) => {
+              return {
+                name: emp.full_name,
+                value: emp.id,
+              };
+            });
+            const employeeQ = {
+              type: "list",
+              name: "employeeId",
+              message: "Which employee do you want to update?",
+              choices: employees,
+            };
+            const roleQ = {
+              type: "list",
+              name: "roleId",
+              message: "What is the employee's role?",
+              choices: roles,
+            };
+            inquirer
+              .prompt([employeeQ, roleQ])
+              .then(({ employeeId, roleId }) => {
+                updateEmployeeRole(roleId, employeeId).then(() => {
+                  displayMenu();
+                });
+              });
+          });
+        });
         break;
       case "Quit":
         closeDbConnection();

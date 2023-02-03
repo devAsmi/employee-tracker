@@ -10,6 +10,7 @@ const {
   addEmployeesSql,
   simpleViewRoleSql,
   simpleViewEmloyeeSql,
+  updateEmployeeRoleSql,
 } = require("./queries");
 
 let db;
@@ -64,6 +65,10 @@ function addEmployee(firstName, lastName, roleId, managerId) {
     .query(addEmployeesSql, [firstName, lastName, roleId, managerId]);
 }
 
+function updateEmployeeRole(roleId, employeeId) {
+  return db.promise().query(updateEmployeeRoleSql, [roleId, employeeId]);
+}
+
 function viewSimpleRoles() {
   return db.promise().query(simpleViewRoleSql);
 }
@@ -88,4 +93,5 @@ module.exports = {
   closeDbConnection,
   viewSimpleRoles,
   viewSimpleEmployees,
+  updateEmployeeRole,
 };
