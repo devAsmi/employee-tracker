@@ -12,8 +12,6 @@
 
 [License](#license)
 
-[Screenshot](#screenshot)
-
 [Video](#videos)
 
 ## Description
@@ -32,6 +30,8 @@ Licensed under the [MIT](https://choosealicense.com/licenses/mit) license
 
 [Github repo](https://github.com/devAsmi)
 
-## Screenshot
-
 ## Videos
+
+![Video gif](./video.gif)
+
+[Video link](https://drive.google.com/file/d/1cBjqCk9_PnHKjqyYnjIG1shog4mkBDZt/view)
