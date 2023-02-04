@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+//object destructuring
 const {
   closeDbConnection,
   viewDepartments,
@@ -28,12 +29,14 @@ const menuQuestion = {
   ],
 };
 
+//question for department
 const departmentQuestion = {
   type: "input",
   name: "departmentName",
   message: "What is the name of the department?",
 };
 
+//question for role
 const roleQuestions = [
   {
     type: "input",
@@ -46,7 +49,7 @@ const roleQuestions = [
     message: "What is the salary of the role?",
   },
 ];
-
+//question for employee
 const employeeQuestions = [
   {
     type: "input",
@@ -76,7 +79,7 @@ function displayMenu() {
           });
         break;
       case "View all roles":
-        viewRoles()
+        viewRoles() //will return a promise that will return the result of query in db
           .then(([rows]) => {
             console.table(rows);
             displayMenu();
@@ -86,7 +89,7 @@ function displayMenu() {
           });
         break;
       case "View all employees":
-        viewEmployees()
+        viewEmployees() //will return a promise that will return the result of query in db
           .then(([rows]) => {
             console.table(rows);
             displayMenu();
